@@ -1,0 +1,13 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:PCL.Communist.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="using:PCL.Communist.Views"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="PCL.Communist.Views.MainWindow"
+        Width="820" Height="900" MinWidth="360" MinHeight="520"
+        Background="#120F13" Icon="/Assets/Icon.png"
+        Title="PCL Communist · 跨平台预览">
+        <views:MainView />
+</Window>

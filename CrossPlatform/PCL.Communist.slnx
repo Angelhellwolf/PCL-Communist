@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="PCL.Communist.Core/PCL.Communist.Core.csproj" />
+  <Project Path="PCL.Communist/PCL.Communist.csproj" />
+  <Project Path="PCL.Communist.Desktop/PCL.Communist.Desktop.csproj" />
+  <Project Path="PCL.Communist.Tests/PCL.Communist.Tests.csproj" />
+</Solution>

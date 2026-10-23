@@ -4,7 +4,9 @@ param(
     [string]$ArgumentLine = '',
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [int]$TimeoutSeconds = 30,
-    [switch]$ExpectMainWindow
+    [switch]$ExpectMainWindow,
+    [string]$ExpectedWindowTitle = 'PCL Communist',
+    [string]$ExpectedWindowClassPrefix = 'HwndWrapper'
 )
 $ErrorActionPreference = 'Stop'
 $Executable = [IO.Path]::GetFullPath($Executable)
@@ -55,7 +57,7 @@ public static class RedIsolatedTest {
     [DllImport("user32.dll")] private static extern bool GetWindowRect(IntPtr window, out Rect rectangle);
     [DllImport("user32.dll")] private static extern bool PrintWindow(IntPtr window, IntPtr context, uint flags);
 
-    public static int Run(string executable, string arguments, string output, int seconds, bool expectWindow) {
+    public static int Run(string executable, string arguments, string output, int seconds, bool expectWindow, string expectedTitle, string expectedClassPrefix) {
         string name = "RedTest-" + Guid.NewGuid().ToString("N");
         IntPtr desktop = CreateDesktop(name, IntPtr.Zero, IntPtr.Zero, 0, 0x01FF, IntPtr.Zero);
         if (desktop == IntPtr.Zero) throw new Win32Exception(Marshal.GetLastWin32Error());
@@ -86,7 +88,7 @@ public static class RedIsolatedTest {
                 GetWindowText(window, title, title.Capacity);
                 GetClassName(window, kind, kind.Capacity);
                 windows.Add(kind + " | " + title);
-                if (title.ToString() == "PCL Communist" && kind.ToString().StartsWith("HwndWrapper")) main = window;
+                if (title.ToString() == expectedTitle && kind.ToString().StartsWith(expectedClassPrefix, StringComparison.Ordinal)) main = window;
                 if (kind.ToString() == "#32770") {
                     errorDialog = true;
                     EnumChildWindows(window, delegate(IntPtr child, IntPtr unused) {
@@ -128,6 +130,6 @@ public static class RedIsolatedTest {
 }
 '@
 }
-$testExitCode = [RedIsolatedTest]::Run($Executable, $ArgumentLine, $OutputDirectory, $TimeoutSeconds, $ExpectMainWindow.IsPresent)
+$testExitCode = [RedIsolatedTest]::Run($Executable, $ArgumentLine, $OutputDirectory, $TimeoutSeconds, $ExpectMainWindow.IsPresent, $ExpectedWindowTitle, $ExpectedWindowClassPrefix)
 if ($testExitCode -ne 0) { throw "Isolated test failed with exit code $testExitCode. See $OutputDirectory." }
 Write-Output "PASS: isolated process check. Results: $OutputDirectory"

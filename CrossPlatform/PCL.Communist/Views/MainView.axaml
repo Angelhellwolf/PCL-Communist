@@ -1,0 +1,108 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:PCL.Communist.ViewModels"
+             xmlns:core="using:PCL.Communist.Core"
+             x:Class="PCL.Communist.Views.MainView"
+             x:DataType="vm:MainViewModel" Background="#120F13">
+  <UserControl.Styles>
+    <Style Selector="TextBlock"><Setter Property="Foreground" Value="#F5F0F2" /></Style>
+    <Style Selector="TextBlock.muted"><Setter Property="Foreground" Value="#B6A9B1" /><Setter Property="FontSize" Value="12" /></Style>
+    <Style Selector="TextBlock.label"><Setter Property="FontWeight" Value="SemiBold" /><Setter Property="Margin" Value="0,0,0,8" /></Style>
+    <Style Selector="Border.card"><Setter Property="Background" Value="#211A21" /><Setter Property="BorderBrush" Value="#3B2B35" /><Setter Property="BorderThickness" Value="1" /><Setter Property="CornerRadius" Value="16" /><Setter Property="Padding" Value="22" /></Style>
+    <Style Selector="Button"><Setter Property="MinHeight" Value="44" /><Setter Property="CornerRadius" Value="8" /></Style>
+    <Style Selector="TextBox"><Setter Property="MinHeight" Value="44" /><Setter Property="CornerRadius" Value="8" /></Style>
+    <Style Selector="ComboBox"><Setter Property="MinHeight" Value="44" /><Setter Property="CornerRadius" Value="8" /></Style>
+  </UserControl.Styles>
+  <Grid RowDefinitions="Auto,*">
+    <Border Padding="22,16" Background="#1B141B" BorderBrush="#382630" BorderThickness="0,0,0,1">
+      <Grid ColumnDefinitions="Auto,*">
+        <Image Source="/Assets/Icon.png" Width="42" Height="42" Margin="0,0,12,0" />
+        <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="3">
+          <TextBlock Text="PCL Communist" FontWeight="Bold" FontSize="20" />
+          <TextBlock Text="让所有颜色属于所有人。" Classes="muted" />
+        </StackPanel>
+      </Grid>
+    </Border>
+    <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled">
+      <StackPanel Margin="20,24" Spacing="18" MaxWidth="920" HorizontalAlignment="Stretch">
+        <Border Background="{Binding AccentBrush}" CornerRadius="18" Padding="24,26">
+          <StackPanel Spacing="12">
+            <TextBlock Text="每个世界，都属于你。" FontSize="27" FontWeight="Bold" TextWrapping="Wrap" />
+            <TextBlock Text="自由选择颜色，下载游戏，开始探索。" TextWrapping="Wrap" Foreground="#FFF2E7" />
+            <TextBlock Text="{Binding PlatformName}" FontSize="12" FontWeight="SemiBold" />
+          </StackPanel>
+        </Border>
+        <Border Classes="card" IsVisible="{Binding IsMobile}" BorderBrush="#846138">
+          <StackPanel Spacing="8">
+            <TextBlock Text="移动端预览" Foreground="#E7BE77" FontWeight="Bold" />
+            <TextBlock Text="{Binding MobileNotice}" TextWrapping="Wrap" FontSize="13" />
+          </StackPanel>
+        </Border>
+        <Border Classes="card">
+          <StackPanel Spacing="14">
+            <TextBlock Text="准备出发" FontSize="20" FontWeight="SemiBold" />
+            <TextBlock Text="游戏版本" Classes="label" />
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+              <ComboBox ItemsSource="{Binding Versions}" SelectedItem="{Binding SelectedVersion}" HorizontalAlignment="Stretch" IsEnabled="{Binding !IsBusy}" PlaceholderText="刷新列表以选择版本">
+                <ComboBox.ItemTemplate><DataTemplate x:DataType="core:MinecraftVersion"><TextBlock Text="{Binding Id}" /></DataTemplate></ComboBox.ItemTemplate>
+              </ComboBox>
+              <Button Grid.Column="1" Content="刷新" Command="{Binding RefreshCommand}" />
+            </Grid>
+            <TextBlock Text="玩家名称" Classes="label" />
+            <TextBox Text="{Binding PlayerName}" PlaceholderText="Player" IsEnabled="{Binding !IsBusy}" MaxLength="16" />
+            <TextBlock Text="{Binding AccountStatus}" Classes="muted" TextWrapping="Wrap" />
+            <WrapPanel Orientation="Horizontal">
+              <Button Content="微软账号登录" Command="{Binding LoginCommand}" Margin="0,0,10,8" />
+              <Button Content="退出账号" Command="{Binding LogoutCommand}" Margin="0,0,0,8" />
+            </WrapPanel>
+            <Border Background="#30212A" Padding="16" CornerRadius="10" IsVisible="{Binding ShowLoginCode}">
+              <StackPanel Spacing="10">
+                <TextBlock Text="在登录网页输入此代码" />
+                <SelectableTextBlock Text="{Binding LoginCode}" FontSize="28" FontWeight="Bold" Foreground="#F2D29B" />
+                <Button Content="打开微软登录网页" Click="OpenLoginSite" />
+                <SelectableTextBlock Text="{Binding LoginAddress}" TextWrapping="Wrap" FontSize="12" />
+              </StackPanel>
+            </Border>
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+              <Button Content="下载 / 校验" Command="{Binding InstallCommand}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+              <Button Grid.Column="1" Content="{Binding LaunchLabel}" Command="{Binding LaunchCommand}" Background="{Binding AccentBrush}" Foreground="White" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" FontWeight="Bold" />
+            </Grid>
+            <TextBlock Text="{Binding RuntimeDescription}" Classes="muted" TextWrapping="Wrap" />
+          </StackPanel>
+        </Border>
+        <Border Classes="card">
+          <StackPanel Spacing="12">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+              <TextBlock Text="{Binding Status}" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="13" />
+              <Button Grid.Column="1" Content="取消" Command="{Binding CancelCommand}" IsVisible="{Binding IsBusy}" />
+            </Grid>
+            <ProgressBar Value="{Binding Progress}" Minimum="0" Maximum="100" Height="5" Foreground="{Binding AccentBrush}" />
+          </StackPanel>
+        </Border>
+        <Border Classes="card">
+          <StackPanel Spacing="14">
+            <TextBlock Text="你的启动器，你做主" FontSize="18" FontWeight="SemiBold" />
+            <TextBlock Text="主题颜色 · 全部开放" Classes="label" />
+            <ComboBox ItemsSource="{Binding Themes}" SelectedItem="{Binding SelectedTheme}" HorizontalAlignment="Stretch" IsEnabled="{Binding !IsBusy}">
+              <ComboBox.ItemTemplate><DataTemplate x:DataType="vm:LauncherTheme"><TextBlock Text="{Binding Name}" /></DataTemplate></ComboBox.ItemTemplate>
+            </ComboBox>
+            <Expander Header="运行设置" HorizontalAlignment="Stretch">
+              <StackPanel Spacing="10">
+                <TextBlock Text="内存（MB）" Classes="label" />
+                <NumericUpDown Value="{Binding MemoryMb}" Minimum="512" Maximum="32768" Increment="512" FormatString="0" IsEnabled="{Binding !IsBusy}" />
+                <StackPanel IsVisible="{Binding IsDesktop}" Spacing="10">
+                  <TextBlock Text="Java 可执行文件（留空自动安装）" TextWrapping="Wrap" />
+                  <TextBox Text="{Binding JavaPath}" PlaceholderText="自动选择对应版本和架构" IsEnabled="{Binding !IsBusy}" />
+                  <TextBlock Text="游戏目录" />
+                  <TextBox Text="{Binding GameRoot}" IsEnabled="{Binding !IsBusy}" />
+                </StackPanel>
+              </StackPanel>
+            </Expander>
+            <Button Content="保存设置" Command="{Binding SaveSettingsCommand}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+          </StackPanel>
+        </Border>
+        <TextBlock Text="共产共享 · 免费使用 · 源码开放" HorizontalAlignment="Center" Classes="muted" Margin="0,4,0,12" />
+      </StackPanel>
+    </ScrollViewer>
+  </Grid>
+</UserControl>

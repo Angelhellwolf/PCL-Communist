@@ -1,0 +1,95 @@
+name: Cross-platform preview
+
+on:
+  push:
+    branches: [main]
+    paths: ['CrossPlatform/**', 'tools/Build-CrossPlatform.ps1', 'tools/package_cross_platform.py', 'tools/Test-IsolatedProcess.ps1', '.github/workflows/cross-platform.yml']
+  pull_request:
+    paths: ['CrossPlatform/**', 'tools/Build-CrossPlatform.ps1', 'tools/package_cross_platform.py', 'tools/Test-IsolatedProcess.ps1', '.github/workflows/cross-platform.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  desktop:
+    name: Desktop ${{ matrix.runtime }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {runner: windows-latest, runtime: win-x64}
+          - {runner: ubuntu-latest, runtime: linux-x64}
+          - {runner: macos-latest, runtime: osx-x64}
+          - {runner: macos-latest, runtime: osx-arm64}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
+        with:
+          dotnet-version: 10.0.x
+      - name: Run core and responsive UI checks
+        shell: pwsh
+        run: ./tools/Build-CrossPlatform.ps1 -Target test
+      - name: Publish self-contained application
+        shell: pwsh
+        run: ./tools/Build-CrossPlatform.ps1 -Target desktop -Runtime ${{ matrix.runtime }}
+      - name: Check native Windows startup on an inactive desktop
+        if: matrix.runtime == 'win-x64'
+        shell: powershell
+        run: ./tools/Test-IsolatedProcess.ps1 -Executable ./artifacts/cross-platform/win-x64/PCL.Communist.Desktop.exe -OutputDirectory ./artifacts/cross-platform/windows-startup -TimeoutSeconds 10 -ExpectMainWindow -ExpectedWindowTitle 'PCL Communist · 跨平台预览' -ExpectedWindowClassPrefix Avalonia
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: preview-${{ matrix.runtime }}
+          path: |
+            artifacts/cross-platform/packages/*.tar.gz*
+            artifacts/cross-platform/packages/*.zip*
+            artifacts/cross-platform/qa/*.png
+            artifacts/cross-platform/windows-startup/*
+          if-no-files-found: error
+
+  android:
+    name: Android arm64 preview APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet workload install android --skip-manifest-update
+      - name: Install matching Android SDK and JDK
+        run: dotnet build CrossPlatform/PCL.Communist.Android -t:InstallAndroidDependencies -f net10.0-android -p:AndroidSdkDirectory="$RUNNER_TEMP/android-sdk" -p:JavaSdkDirectory="$RUNNER_TEMP/jdk" -p:AcceptAndroidSDKLicenses=True
+      - name: Build debug-signed preview APK
+        shell: pwsh
+        run: ./tools/Build-CrossPlatform.ps1 -Target android -AndroidSdkDirectory "$env:RUNNER_TEMP/android-sdk" -JavaSdkDirectory "$env:RUNNER_TEMP/jdk"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: preview-android-arm64
+          path: artifacts/cross-platform/android-arm64/*-Signed.apk
+          if-no-files-found: error
+
+  ios:
+    name: iPhone and iPad simulator preview
+    runs-on: macos-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet workload install ios --skip-manifest-update
+      - name: Build simulator application without signing credentials
+        shell: pwsh
+        run: ./tools/Build-CrossPlatform.ps1 -Target ios-simulator
+      - name: Archive simulator application
+        run: |
+          app=$(find artifacts/cross-platform -maxdepth 2 -type d -name '*.app' -print -quit)
+          test -n "$app"
+          tar -czf artifacts/cross-platform/PCL-Communist-ios-simulator.tar.gz -C "$(dirname "$app")" "$(basename "$app")"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: preview-ios-simulator
+          path: artifacts/cross-platform/PCL-Communist-ios-simulator.tar.gz
+          if-no-files-found: error

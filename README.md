@@ -6,7 +6,7 @@
 
 基于 Plain Craft Launcher 的第三方独立修改版。原作者为龙腾猫跃及 PCL 贡献者；本项目由社区独立维护。
 
-[下载单文件 EXE](https://github.com/Angelhellwolf/PCL-Communist/releases/latest) · [共产共享协议](COMMUNIST-AGREEMENT.txt) · [查看源代码](https://github.com/Angelhellwolf/PCL-Communist) · [反馈问题](https://github.com/Angelhellwolf/PCL-Communist/issues)
+[下载单文件 EXE](https://github.com/Angelhellwolf/PCL-Communist/releases/latest) · [下载跨平台预览](https://github.com/Angelhellwolf/PCL-Communist/releases/tag/v0.1.0-preview.1) · [共产共享协议](COMMUNIST-AGREEMENT.txt) · [查看源代码](https://github.com/Angelhellwolf/PCL-Communist) · [反馈问题](https://github.com/Angelhellwolf/PCL-Communist/issues)
 
 ![启动器主页](docs/images/launcher.png)
 
@@ -16,14 +16,15 @@
 
 ## 平台支持
 
-| 平台 | 发布状态 | 所需移植工作 |
+| 平台 | 当前状态 | 游戏启动与验证 |
 | --- | --- | --- |
 | Windows | 已发布单文件 EXE | 当前支持的平台 |
-| macOS（Intel / Apple Silicon） | 尚无可用构建 | 替换 Windows 界面与系统接口，适配 Java、游戏原生库及启动流程 |
-| Android | 尚无可用构建 | 移动端界面、Java 运行时、图形后端和触控适配 |
-| iOS / iPadOS | 尚无可用构建 | 移动端界面、Java 运行时、图形后端、输入与设备安装适配 |
+| macOS（Intel / Apple Silicon） | 新增独立跨平台预览工程与 `.app` 打包 | 已实现分架构 Java、原生库与启动参数；尚需 Mac 真机游戏验证 |
+| Linux | 新增共用桌面预览工程 | 已实现原版启动路径；核心与界面检查在 Linux 执行 |
+| Android | 新增原生预览工程，可构建 arm64 APK | 共用界面、登录与资源下载已移植；**游戏运行时尚未接入** |
+| iOS / iPadOS | 新增 iPhone/iPad 原生入口与模拟器构建工作流 | 需要 Mac/Xcode 编译；**游戏运行时尚未接入** |
 
-当前代码使用 .NET Framework 4.8、WPF 和 Windows Forms；[WPF 仅支持 Windows](https://learn.microsoft.com/dotnet/desktop/wpf/overview/)。游戏启动代码的系统规则与原生库选择、Java 下载也按 Windows 实现，因此其他平台需要单独移植。当前 Releases 中的 EXE 和完整源码包均为 Windows 版本，尚未完成 macOS、Android 或 iOS 的游戏启动验证。
+原 Windows 启动器使用 .NET Framework 4.8、WPF 和 Windows Forms；[WPF 仅支持 Windows](https://learn.microsoft.com/dotnet/desktop/wpf/overview/)。新移植工程位于 `CrossPlatform/`，使用 .NET 10 与 Avalonia，共用核心与界面，提供各系统原生入口。当前 Releases 中的 EXE 仍为 Windows 正式版；跨平台工程是功能尚未完整迁移的预览版，移动端当前不能启动游戏。构建方法、能力和验证边界见[跨平台预览说明](docs/cross-platform.md)。
 
 ## 功能
 

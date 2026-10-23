@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../PCL.Communist/PCL.Communist.csproj" />
+    <PackageReference Include="Avalonia.Headless" />
+    <PackageReference Include="Avalonia.Desktop" />
+  </ItemGroup>
+</Project>
