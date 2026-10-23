@@ -14,6 +14,17 @@
 
 在 Releases 下载启动器 EXE，直接运行。运行环境为 Windows 与 .NET Framework 4.8，无需旁置 DLL、配置文件或安装 .NET SDK。程序运行后会按需创建设置、日志和游戏文件。
 
+## 平台支持
+
+| 平台 | 发布状态 | 所需移植工作 |
+| --- | --- | --- |
+| Windows | 已发布单文件 EXE | 当前支持的平台 |
+| macOS（Intel / Apple Silicon） | 尚无可用构建 | 替换 Windows 界面与系统接口，适配 Java、游戏原生库及启动流程 |
+| Android | 尚无可用构建 | 移动端界面、Java 运行时、图形后端和触控适配 |
+| iOS / iPadOS | 尚无可用构建 | 移动端界面、Java 运行时、图形后端、输入与设备安装适配 |
+
+当前代码使用 .NET Framework 4.8、WPF 和 Windows Forms；[WPF 仅支持 Windows](https://learn.microsoft.com/dotnet/desktop/wpf/overview/)。游戏启动代码的系统规则与原生库选择、Java 下载也按 Windows 实现，因此其他平台需要单独移植。当前 Releases 中的 EXE 和完整源码包均为 Windows 版本，尚未完成 macOS、Android 或 iOS 的游戏启动验证。
+
 ## 功能
 
 - 默认苏维埃红主题：红金配色、镰刀锤子背景，以及统一的程序、窗口和启动图标。
