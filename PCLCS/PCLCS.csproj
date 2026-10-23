@@ -59,7 +59,7 @@
 		<EmbeddedResource Include="Launch\JavaWrapper.jar" LogicalName="Launch\JavaWrapper.jar" />
 		<EmbeddedResource Include="Launch\LwjglUnsafeAgent.jar" LogicalName="Launch\LwjglUnsafeAgent.jar" />
 		<EmbeddedResource Include="Resource\WikiEntries.txt" LogicalName="Resource\WikiEntries.txt" />
-		<EmbeddedResource Include="Minecraft\OptiFineHashes.json" LogicalName="Minecraft\OptiFineHashes.json" />
+		<EmbeddedResource Include="Minecraft\OptifineHashes.json" LogicalName="Minecraft\OptiFineHashes.json" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Reference Include="Microsoft.VisualBasic" />

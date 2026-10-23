@@ -4,7 +4,7 @@
     xmlns:local="clr-namespace:PCL"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
     x:Name="WindMain" x:Class="FormMain" Style="{StaticResource MyWindow}"
-    AllowDrop="True" Topmost="True" Title="Plain Craft Launcher　" AllowsTransparency="True" MinHeight="470" MinWidth="810" 
+    AllowDrop="True" Topmost="True" Title="PCL Communist" AllowsTransparency="True" MinHeight="470" MinWidth="810"
     ScrollViewer.VerticalScrollBarVisibility="Disabled" Icon="/Plain Craft Launcher 2;component/Images/icon.ico" WindowStyle="None" 
     ResizeMode="CanMinimize" Background="{x:Null}" d:DesignWidth="870" d:DesignHeight="520" Width="850" Height="500" 
     RenderTransformOrigin="0.5,0.5">
@@ -97,6 +97,17 @@
                 </Grid.RowDefinitions>
                 <Canvas x:Name="ImgBack" IsHitTestVisible="False" Grid.Row="1" RenderOptions.BitmapScalingMode="LowQuality"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <Grid x:Name="CommunismBackdrop" Grid.Row="1" IsHitTestVisible="False" Visibility="Collapsed" ClipToBounds="True">
+                    <Viewbox Width="420" Height="420" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-45,-70" Opacity="0.12">
+                        <Grid Width="420" Height="420">
+                            <Ellipse Width="336" Height="336" Stroke="#FFC19547" StrokeThickness="2" />
+                            <Ellipse Width="360" Height="360" Stroke="#FFC19547" StrokeThickness="1" />
+                            <TextBlock Text="☭" FontFamily="Segoe UI Symbol" FontSize="282" Foreground="#FFAC1520" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8,-10,0,0" />
+                            <Path Data="M 15,0 L 19,10 L 30,11 L 22,18 L 24,30 L 15,24 L 6,30 L 8,18 L 0,11 L 11,10 Z" Fill="#FFAC1520" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0" />
+                        </Grid>
+                    </Viewbox>
+                    <Border Width="4" Background="#30C19547" HorizontalAlignment="Left" Margin="12,24,0,24" />
+                </Grid>
                 <Grid x:Name="PanTitle" Height="48">
                     <Grid.Background>
                         <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
@@ -104,6 +115,13 @@
                         </LinearGradientBrush>
                     </Grid.Background>
                     <local:MyImage x:Name="ImgTitle" IsHitTestVisible="False" Stretch="UniformToFill" IsEnabled="False" RenderOptions.BitmapScalingMode="LowQuality" />
+                    <Viewbox x:Name="CommunismEmblem" Width="78" Height="44" HorizontalAlignment="Right" Margin="0,0,116,0" Visibility="Collapsed" IsHitTestVisible="False" Opacity="0.85">
+                        <Grid Width="90" Height="50">
+                            <TextBlock Text="☭" FontFamily="Segoe UI Symbol" FontSize="46" Foreground="#FFFFD36A" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <Path Data="M 10,0 L 13,7 L 21,8 L 15,13 L 17,21 L 10,17 L 3,21 L 5,13 L 0,8 L 7,7 Z" Fill="#FFFFD36A" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,2,0,0" />
+                        </Grid>
+                    </Viewbox>
+                    <Border x:Name="CommunismRule" Height="2" Background="#FFFFD36A" VerticalAlignment="Bottom" Visibility="Collapsed" IsHitTestVisible="False" />
                     <local:MyIconButton x:Name="BtnTitleClose" HorizontalAlignment="Right" Height="28" VerticalAlignment="Center" Width="28" Margin="0,0,12,0" Theme="White" 
                                        LogoScale="0.72" Logo="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                     <local:MyIconButton x:Name="BtnTitleMin" HorizontalAlignment="Right" Height="28" VerticalAlignment="Center" Width="28" Margin="0,0,44,0" Theme="White" 

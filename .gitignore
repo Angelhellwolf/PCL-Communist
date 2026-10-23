@@ -342,3 +342,12 @@ ASALocalRun/
 healthchecksdb
 
 MaskFiles/
+
+# Local build credentials and packaged artifacts
+.local/
+artifacts/
+.env
+.env.*
+*.pem
+*.key
+build-credentials.json

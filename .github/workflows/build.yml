@@ -1,69 +1,75 @@
 name: Build
+
 on:
   push:
-    paths:
-      - 'Plain Craft Launcher 2/**'
-      - '.github/workflows/**'
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
   pull_request:
-    paths:
-      - 'Plain Craft Launcher 2/**'
-      - '.github/workflows/**'
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  build:
-    name: Build
+  windows:
+    name: Windows Release
     runs-on: windows-latest
-    strategy:  
-       matrix:  
-         configuration: [Debug, Release]
-
+    timeout-minutes: 20
     steps:
+      - name: Checkout source and pinned dependencies
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
 
-    - name: Checkout
-      uses: actions/checkout@v6
-      with:
-        fetch-depth: 1
-        submodules: true
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: 9.0.x
 
-    - name: Set Describe
-      shell: bash
-      run: |
-          describe=`git describe --tags --always`
-          echo "describe=$describe" >> $GITHUB_ENV
+      - name: Build public single executable
+        shell: pwsh
+        run: ./tools/Build.ps1
 
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v3
-      with:
-        msbuild-architecture: x64
-    
-    - name: Update Help
-      run:  |
-        Set-Location ..
-        git clone https://github.com/LTCatt/PCL2Help.git -b master --single-branch --depth 1
-        Set-Location PCL2Help
-        Remove-Item -Path *.* -Recurse -Force
-        Compress-Archive -Path .\* -DestinationPath .\Help.zip
-        Copy-Item -Path .\Help.zip -Destination "${{ GITHUB.WORKSPACE }}\Plain Craft Launcher 2\Resources\Help.zip" -Force
-        Set-Location ..
-        Remove-Item PCL2Help -Recurse -Force
-        Set-Location ${{ GITHUB.WORKSPACE }}
+      - name: Build runtime checks
+        shell: pwsh
+        run: dotnet build ./tools/SmokeTest/SmokeTest.csproj -c Release -v:minimal
 
+      - name: Check themes and public executable
+        shell: powershell
+        run: |
+          $launcher = Join-Path $env:GITHUB_WORKSPACE 'artifacts\PCL-Communist-2.99.0.0\PCL Communist.exe'
+          $hostExe = Join-Path $env:GITHUB_WORKSPACE 'tools\SmokeTest\bin\Release\net48\SmokeTest.exe'
+          $results = Join-Path $env:RUNNER_TEMP 'pcl-runtime-results'
+          $testArguments = '"' + $launcher + '" "' + $results + '"'
+          ./tools/Test-IsolatedProcess.ps1 -Executable $hostExe -ArgumentLine $testArguments -OutputDirectory $results -TimeoutSeconds 60
+          Get-Content -LiteralPath (Join-Path $results 'test-console.txt')
 
-    - name: Replace
-      run: |
-        (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Public OAuthClientId As String = If(Environment.GetEnvironmentVariable("PCL_MS_CLIENT_ID"), "")', 'Public OAuthClientId As String = If(Environment.GetEnvironmentVariable("PCL_MS_CLIENT_ID"), "${{ secrets.CLIENT_ID }}")' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
-        (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Public CurseForgeAPIKey As String = If(Environment.GetEnvironmentVariable("PCL_CURSEFORGE_API_KEY"), "")', 'Public CurseForgeAPIKey As String = If(Environment.GetEnvironmentVariable("PCL_CURSEFORGE_API_KEY"), "${{ secrets.CURSEFORGE_API_KEY }}")' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
-        (gc "Plain Craft Launcher 2\Modules\Base\ModBase.vb") -replace 'Public Const CommitHash As String = ""', 'Public Const CommitHash As String = "${{ github.sha }}"' | Out-File "Plain Craft Launcher 2\Modules\Base\ModBase.vb"
-        
-    - name: Restore NuGet Packages
-      run: dotnet restore PCLCS\PCLCS.csproj
+      - name: Check standalone startup
+        shell: powershell
+        run: |
+          $fixture = Join-Path $env:RUNNER_TEMP 'pcl-standalone'
+          New-Item -ItemType Directory -Path $fixture | Out-Null
+          Copy-Item -LiteralPath './artifacts/PCL-Communist-2.99.0.0/PCL Communist.exe' -Destination $fixture
+          ./tools/Test-IsolatedProcess.ps1 -Executable (Join-Path $fixture 'PCL Communist.exe') -OutputDirectory (Join-Path $env:RUNNER_TEMP 'pcl-startup-results') -TimeoutSeconds 10 -ExpectMainWindow
 
-    - name: Build
-      run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ matrix.configuration }}
+      - name: Upload executable
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: PCL-Communist
+          path: artifacts/PCL-Communist-2.99.0.0/PCL Communist.exe
+          if-no-files-found: error
 
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v7
-      with:
-        name: ${{ matrix.configuration }} ${{ env.describe }}
-        path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
+      - name: Upload runtime diagnostics
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: runtime-diagnostics
+          path: |
+            ${{ runner.temp }}/pcl-runtime-results
+            ${{ runner.temp }}/pcl-startup-results
+          if-no-files-found: ignore

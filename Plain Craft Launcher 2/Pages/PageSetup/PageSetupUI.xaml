@@ -38,7 +38,7 @@
                             <local:MySlider local:SettingService.Key="UiLauncherLight" 
                                             Grid.Row="2" Grid.Column="4" x:Name="SliderLauncherLight" Visibility="Collapsed" MaxValue="40" ValueByKey="5" Margin="0,10,0,0" />
                         </Grid>
-                        <Grid x:Name="PanLauncherTheme" Height="90" Margin="0,0,0,7">
+                        <Grid x:Name="PanLauncherTheme" Height="120" Margin="0,0,0,7">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="Name1" />
                                 <ColumnDefinition />
@@ -51,6 +51,7 @@
                                 <RowDefinition />
                                 <RowDefinition />
                                 <RowDefinition />
+                                <RowDefinition Height="30" />
                             </Grid.RowDefinitions>
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="主题" Margin="0,0,20,0" />
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="隐藏主题" Margin="0,0,20,0" Grid.Row="1" />
@@ -65,40 +66,38 @@
                             <local:MyRadioBox local:SettingService.Key="UiLauncherTheme" local:SettingService.Value="4" 
                                               Grid.Column="5" Grid.Row="0" Text="橡木棕" x:Name="RadioLauncherTheme4" />
                             <local:MyRadioBox local:SettingService.Key="UiLauncherTheme" local:SettingService.Value="5" 
-                                              Grid.Column="1" Grid.Row="1" Text="玄素黑" x:Name="RadioLauncherTheme5" Opacity="0" ToolTip="灰色是个谎言" />
-                            <local:MyRadioBox Grid.Column="1" Grid.Row="1" Text="玄素黑" x:Name="RadioLauncherTheme5Gray" IsEnabled="False" Opacity="1" />
-                            <TextBlock Grid.Column="1" Grid.Row="1" x:Name="LabLauncherTheme5Unlock" Background="{StaticResource ColorBrushSemiTransparent}" ToolTip="灰色是个谎言" />
+                                              Grid.Column="1" Grid.Row="1" Text="玄素黑" x:Name="RadioLauncherTheme5" Opacity="1" ToolTip="所有主题均已开放" />
+                            <local:MyRadioBox Grid.Column="1" Grid.Row="1" Text="玄素黑" x:Name="RadioLauncherTheme5Gray" Visibility="Collapsed" IsEnabled="False" Opacity="1" />
+                            <TextBlock Grid.Column="1" Grid.Row="1" x:Name="LabLauncherTheme5Unlock" Visibility="Collapsed" Background="{StaticResource ColorBrushSemiTransparent}" ToolTip="所有主题均已开放" />
                             <local:MyRadioBox local:SettingService.Key="UiLauncherTheme" local:SettingService.Value="12" 
-                                              Grid.Column="2" Grid.Row="1" Text="滑稽彩" x:Name="RadioLauncherTheme12" IsEnabled="False" ToolTip="滑稽树上滑稽果，滑稽树下你和我，滑稽之日搞事情，欢乐多又多" ToolTipService.ShowOnDisabled="True" />
+                                              Grid.Column="2" Grid.Row="1" Text="滑稽彩" x:Name="RadioLauncherTheme12" ToolTip="所有主题均已开放" ToolTipService.ShowOnDisabled="True" />
                             <local:MyRadioBox local:SettingService.Key="UiLauncherTheme" local:SettingService.Value="6" 
-                                              Grid.Column="3" Grid.Row="1" Text="铁杆粉" x:Name="RadioLauncherTheme6" IsEnabled="False" ToolTip="99 次重逢的喜悦" ToolTipService.ShowOnDisabled="True" />
+                                              Grid.Column="3" Grid.Row="1" Text="铁杆粉" x:Name="RadioLauncherTheme6" ToolTip="所有主题均已开放" ToolTipService.ShowOnDisabled="True" />
                             <local:MyRadioBox local:SettingService.Key="UiLauncherTheme" local:SettingService.Value="7" 
-                                              Grid.Column="4" Grid.Row="1" Text="神秘紫" x:Name="RadioLauncherTheme7" IsEnabled="False" ToolTip="072 101 108 112 032 068 101 118 032 048 046 052 046 052" ToolTipService.ShowOnDisabled="True" />
+                                              Grid.Column="4" Grid.Row="1" Text="神秘紫" x:Name="RadioLauncherTheme7" ToolTip="所有主题均已开放" ToolTipService.ShowOnDisabled="True" />
                             <local:MyRadioBox local:SettingService.Key="UiLauncherTheme" local:SettingService.Value="13" 
-                                              Grid.Column="5" Grid.Row="1" Text="欧皇彩" x:Name="RadioLauncherTheme13" IsEnabled="False" ToolTip="这就是传说中的欧皇了吧" ToolTipService.ShowOnDisabled="True" />
+                                              Grid.Column="5" Grid.Row="1" Text="欧皇彩" x:Name="RadioLauncherTheme13" ToolTip="所有主题均已开放" ToolTipService.ShowOnDisabled="True" />
                             <local:MyRadioBox local:SettingService.Key="UiLauncherTheme" local:SettingService.Value="8" 
-                                              Grid.Column="1" Grid.Row="2" Text="秋仪金" x:Name="RadioLauncherTheme8" IsEnabled="False" />
-                            <TextBlock Grid.Column="1" Grid.Row="2" x:Name="LabLauncherTheme8Copy" Background="{StaticResource ColorBrushSemiTransparent}" />
+                                              Grid.Column="1" Grid.Row="2" Text="秋仪金" x:Name="RadioLauncherTheme8" />
+                            <TextBlock Grid.Column="1" Grid.Row="2" x:Name="LabLauncherTheme8Copy" Visibility="Collapsed" Background="{StaticResource ColorBrushSemiTransparent}" />
                             <local:MyRadioBox local:SettingService.Key="UiLauncherTheme" local:SettingService.Value="9" 
-                                              Grid.Column="2" Grid.Row="2" Text="活跃橙" x:Name="RadioLauncherTheme9" IsEnabled="False" />
-                            <TextBlock Grid.Column="2" Grid.Row="2" x:Name="LabLauncherTheme9Copy" Background="{StaticResource ColorBrushSemiTransparent}" />
+                                              Grid.Column="2" Grid.Row="2" Text="活跃橙" x:Name="RadioLauncherTheme9" />
+                            <TextBlock Grid.Column="2" Grid.Row="2" x:Name="LabLauncherTheme9Copy" Visibility="Collapsed" Background="{StaticResource ColorBrushSemiTransparent}" />
                             <local:MyRadioBox local:SettingService.Key="UiLauncherTheme" local:SettingService.Value="10" 
-                                              Grid.Column="3" Grid.Row="2" Text="跳票红" x:Name="RadioLauncherTheme10" IsEnabled="False" ToolTip="进行一次正版登录，支持正版游戏！" ToolTipService.ShowOnDisabled="True" />
+                                              Grid.Column="3" Grid.Row="2" Text="跳票红" x:Name="RadioLauncherTheme10" ToolTip="所有主题均已开放" ToolTipService.ShowOnDisabled="True" />
                             <local:MyRadioBox local:SettingService.Key="UiLauncherTheme" local:SettingService.Value="11" 
-                                              Grid.Column="4" Grid.Row="2" Text="极客蓝" x:Name="RadioLauncherTheme11" IsEnabled="False" ToolTip="右键打开解密游戏入口" />
-                            <TextBlock Grid.Column="4" Grid.Row="2" x:Name="LabLauncherTheme11Click" Background="{StaticResource ColorBrushSemiTransparent}" />
+                                              Grid.Column="4" Grid.Row="2" Text="极客蓝" x:Name="RadioLauncherTheme11" ToolTip="所有主题均已开放" />
+                            <TextBlock Grid.Column="4" Grid.Row="2" x:Name="LabLauncherTheme11Click" Visibility="Collapsed" Background="{StaticResource ColorBrushSemiTransparent}" />
                             <local:MyRadioBox local:SettingService.Key="UiLauncherTheme" local:SettingService.Value="14" 
-                                              Grid.Column="5" Grid.Row="2" Text="自定义" x:Name="RadioLauncherTheme14" IsEnabled="False" ToolTip="需要解锁五个隐藏主题" ToolTipService.ShowOnDisabled="True" />
+                                              Grid.Column="5" Grid.Row="2" Text="自定义" x:Name="RadioLauncherTheme14" ToolTip="所有主题均已开放" ToolTipService.ShowOnDisabled="True" />
+                            <TextBlock VerticalAlignment="Center" Text="成就主题" Margin="0,0,20,0" Grid.Row="2" />
+                            <TextBlock VerticalAlignment="Center" Text="特别主题" Margin="0,0,20,0" Grid.Row="3" />
+                            <local:MyRadioBox local:SettingService.Key="UiLauncherTheme" local:SettingService.Value="15" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" Text="苏维埃红" x:Name="RadioLauncherTheme15" ToolTip="默认主题 · 赤红与鎏金" />
+                            <local:MyRadioBox local:SettingService.Key="UiLauncherTheme" local:SettingService.Value="42" Grid.Column="3" Grid.Row="3" Text="纪念彩" x:Name="RadioLauncherTheme42" ToolTip="特别主题已开放" />
                         </Grid>
-                        <local:MyCheckBox local:SettingService.Key="UiLauncherLogo" Text="打开启动器时显示 PCL 图标" Margin="-1,0,0,1" Height="22" />
+                        <local:MyCheckBox local:SettingService.Key="UiLauncherLogo" Text="打开启动器时显示镰刀锤子图标" Margin="-1,0,0,1" Height="22" />
                     </StackPanel>
-                    <Border Background="#DDDDDDDD" Margin="-8,23,-5,28" CornerRadius="4" Name="PanLauncherHide" Visibility="Collapsed">
-                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <TextBlock Text="如果可以小小赞助一下 PCL，就能解锁主题颜色更换功能啦……&#xa;多亏了大家的支持，PCL 才能在免费、无任何广告的情况下维持数年的更新（磕头）！" FontSize="13" Margin="0,0,0,0" />
-                            <local:MyButton Height="32" MinWidth="140" Text="支持 PCL 开发！" Padding="13,0" HorizontalAlignment="Center" Margin="0,9,0,0" ColorType="Highlight"
-                                            local:CustomEventService.EventType="打开网页" local:CustomEventService.EventData="https://meloong.com/afd/a/LTCat" />
-                        </StackPanel>
-                    </Border>
+                    <Border Background="#DDDDDDDD" Margin="-8,23,-5,28" CornerRadius="4" Name="PanLauncherHide" Visibility="Collapsed"></Border>
                 </Grid>
             </local:MyCard>
             <local:MyCard x:Name="CardBackground" Margin="0,0,0,15" Title="背景图片">
@@ -228,9 +227,9 @@
                             <ColumnDefinition Width="0.2*" />
                         </Grid.ColumnDefinitions>
                         <local:MyRadioBox Text="空白" x:Name="RadioCustomType0" Height="22" local:SettingService.Key="UiCustomType" local:SettingService.Value="0" Grid.Column="0" />
-                        <local:MyRadioBox Text="预设" x:Name="RadioCustomType3" Height="22" local:SettingService.Key="UiCustomType" local:SettingService.Value="3" Grid.Column="1" />
+                        <local:MyRadioBox Text="本地预设" x:Name="RadioCustomType3" Height="22" local:SettingService.Key="UiCustomType" local:SettingService.Value="3" Grid.Column="1" />
                         <local:MyRadioBox Text="读取本地文件" x:Name="RadioCustomType1" Height="22" local:SettingService.Key="UiCustomType" local:SettingService.Value="1" Grid.Column="2" />
-                        <local:MyRadioBox Text="联网更新" x:Name="RadioCustomType2" Height="22" local:SettingService.Key="UiCustomType" local:SettingService.Value="2" Grid.Column="3" />
+                        <local:MyRadioBox Text="联网主页已移除" IsEnabled="False" x:Name="RadioCustomType2" Height="22" local:SettingService.Key="UiCustomType" local:SettingService.Value="2" Grid.Column="3" />
                     </Grid>
                     <local:MyHint Margin="0,15,0,-4" Text="内容见 ModSetup" Theme="Blue" x:Name="HintCustom" />
                     <local:MyHint Margin="0,15,0,6" Text="请谨慎使用陌生人提供的主页，恶意代码可能会造成损害！" Theme="Yellow" x:Name="HintCustomWarn" 
@@ -268,29 +267,6 @@
                         <local:MyComboBox local:SettingService.Key="UiCustomPreset" Grid.ColumnSpan="2" Grid.Column="1">
                             <local:MyComboBoxItem local:SettingService.Value="0" Content="你知道吗？" />
                             <local:MyComboBoxItem local:SettingService.Value="1" Content="回声洞" />
-                            <local:MyComboBoxItem local:SettingService.Value="2" Content="Minecraft 新闻（作者：最亮的信标）" />
-                            <!--<local:MyComboBoxItem local:SettingService.Value="3" Content="简单主页（作者：MFn233）" />-->
-                            <local:MyComboBoxItem local:SettingService.Value="4" Content="每日整合包推荐（作者：wkea）" />
-                            <local:MyComboBoxItem local:SettingService.Value="5" Content="Minecraft 皮肤推荐（作者：wkea）" />
-                            <local:MyComboBoxItem local:SettingService.Value="6" Content="OpenBMCLAPI 仪表盘 Lite（作者：Silverteal、Mxmilu666）" />
-                            <!--<local:MyComboBoxItem local:SettingService.Value="7" Content="PCL 主页市场（作者：凌云）" />-->
-                            <!--<local:MyComboBoxItem local:SettingService.Value="8" Content="PCL 新闻速报（作者：Joker2184）" />-->
-                            <local:MyComboBoxItem local:SettingService.Value="9" Content="PCL 新功能说明书（作者：WForst-Breeze）" />
-                            <!--<local:MyComboBoxItem local:SettingService.Value="10" Content="OpenMCIM 仪表盘（作者：SALTWOOD）" />-->
-                            <local:MyComboBoxItem local:SettingService.Value="11" Content="杂志主页（作者：CreeperIsASpy）" />
-                            <local:MyComboBoxItem local:SettingService.Value="12" Content="PCL GitHub 仪表盘（作者：Deep-Dark-Forest）" />
-                            <local:MyComboBoxItem local:SettingService.Value="13" Content="Minecraft 更新摘要（作者：pynickle）" />
-                            <local:MyComboBoxItem local:SettingService.Value="14" Content="今日新闻热点（作者：EYicheng）" />
-                            <local:MyComboBoxItem local:SettingService.Value="15" Content="Minecraft 芝士站（作者：awaEric233）" />
-                            <local:MyComboBoxItem local:SettingService.Value="16" Content="整合包推荐引擎（作者：CHMYGZ）" />
-                            <local:MyComboBoxItem local:SettingService.Value="17" Content="Bangumi 番剧主页（作者：wzyaeu）" />
-                            <local:MyComboBoxItem local:SettingService.Value="18" Content="Bilibili 热门（作者：wzyaeu）" />
-                            <local:MyComboBoxItem local:SettingService.Value="19" Content="Music 云音乐热门（作者：wzyaeu）" />
-                            <local:MyComboBoxItem local:SettingService.Value="20" Content="模组推荐（作者：llsgllsg）" />
-                            <local:MyComboBoxItem local:SettingService.Value="21" Content="每日游戏推荐（作者：llsgllsg）" />
-                            <local:MyComboBoxItem local:SettingService.Value="22" Content="Wallpaper 每日壁纸（作者：wzyaeu）" />
-                            <local:MyComboBoxItem local:SettingService.Value="23" Content="Weather 天气预报（作者：wzyaeu）" />
-                            <local:MyComboBoxItem local:SettingService.Value="24" Content="新一代狗屁王大杂烩主页（作者：llsgllsg）" />
                         </local:MyComboBox>
                     </Grid>
                 </StackPanel>

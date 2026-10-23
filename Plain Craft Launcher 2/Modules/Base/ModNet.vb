@@ -174,7 +174,7 @@ RequestFinished:
         Dim RetryCount As Integer = 0
 Retry:
         Try
-            FileUtils.Write(LocalPath, SendRequest(Url, HttpMethod.Get, SimulateBrowserHeaders:=SimulateBrowserHeaders))
+            FileUtils.Write(LocalPath, SendRequest(Url, HttpMethod.Get, SimulateBrowserHeaders:=SimulateBrowserHeaders, IsFileDownload:=True))
         Catch ex As Exception
             FileUtils.Delete(LocalPath)
             ex.ThrowIfCanceled()
@@ -215,7 +215,9 @@ Retry:
     '基础请求函数
     Private Function SendRequest(Url As String, Method As HttpMethod,
             Optional Content As Object = Nothing, Optional Headers As Dictionary(Of String, String) = Nothing,
-            Optional SimulateBrowserHeaders As Boolean = False, Optional Timeout As Integer = 25000, Optional Encoding As Encoding = Nothing) As Byte()
+            Optional SimulateBrowserHeaders As Boolean = False, Optional Timeout As Integer = 25000, Optional Encoding As Encoding = Nothing,
+            Optional IsFileDownload As Boolean = False) As Byte()
+        EnsureNetworkAllowed(Url, Method, IsFileDownload)
         If RunInUi() AndAlso Not Url.Contains("//127.") Then Throw New Exception("在 UI 线程执行了网络请求")
         Dim Request As HttpRequestMessage = Nothing, CancelToken As CancellationTokenSource = Nothing, Response As HttpResponseMessage = Nothing
         Try
@@ -912,6 +914,7 @@ StartThread:
                 Dim HttpDataCount As Integer = 0
                 If SourcesOnce.Contains(Th.Source) AndAlso Th <> Th.Source.SingleThread Then GoTo SourceBreak
                 HttpRequest = New HttpRequestMessage(HttpMethod.Get, Th.Source.Url)
+                EnsureNetworkAllowed(Th.Source.Url, HttpMethod.Get, IsFileDownload:=True)
                 SecretHeadersSign(Th.Source.Url, HttpRequest, SimulateBrowserHeaders)
                 CancelToken = New CancellationTokenSource(Timeout)
                 If Not Th.IsFirstThread Then HttpRequest.Headers.Range = New Headers.RangeHeaderValue(Th.DownloadStart, Nothing)
@@ -1889,26 +1892,6 @@ FinishExCatch:
     End Function
 
 #End Region
-
-    ''' <summary>
-    ''' 测试 Ping。失败则返回 -1。
-    ''' </summary>
-    Public Function Ping(Ip As String, Optional Timeout As Integer = 10000, Optional MakeLog As Boolean = True) As Integer
-        Dim PingResult As NetworkInformation.PingReply
-        Try
-            PingResult = (New NetworkInformation.Ping).Send(Ip)
-        Catch ex As Exception
-            If MakeLog Then Logger.Info($"Ping {Ip} 失败：{ex.Message}")
-            Return -1
-        End Try
-        If PingResult.Status = NetworkInformation.IPStatus.Success Then
-            If MakeLog Then Logger.Info($"Ping {Ip} 结束：{PingResult.RoundtripTime}ms")
-            Return PingResult.RoundtripTime
-        Else
-            If MakeLog Then Logger.Info($"Ping {Ip} 失败")
-            Return -1
-        End If
-    End Function
 
     ''' <summary>
     ''' 设置是否应当在正版登录时校验 SSL 证书。

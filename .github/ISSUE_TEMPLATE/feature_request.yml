@@ -1,0 +1,10 @@
+name: 改进建议
+description: 提出功能或体验改进
+body:
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 建议与使用场景
+      description: 请描述你希望改善的体验，以及建议的行为。
+    validations:
+      required: true

@@ -363,34 +363,7 @@ Public Class CustomEvent
 
         '网页确认
         If RelativeUrl.StartsWithF("http", True) Then
-            If RunInUi() Then
-                Throw New Exception("能打开联网帮助页面的 MyListItem 必须手动设置 Title、Info 属性！")
-            End If
-            '获取文件名
-            Dim RawFileName As String
-            Try
-                RawFileName = PathUtils.GetLastPart(RelativeUrl)
-                If Not PathUtils.GetExtension(RawFileName) = "json" Then Throw New Exception("未指向 .json 后缀的文件")
-            Catch ex As Exception
-                Throw New Exception("联网帮助页面须指向一个帮助 JSON 文件，并在同路径下包含相应 XAML 文件！" & vbCrLf &
-                                    "例如：" & vbCrLf &
-                                    " - https://www.baidu.com/test.json（填写这个路径）" & vbCrLf &
-                                    " - https://www.baidu.com/test.xaml（同时也需要包含这个文件）", ex)
-            End Try
-            '下载文件
-            Dim LocalTemp As String = RequestTaskTempFolder() & RawFileName
-            Logger.Info($"转换网络资源：{RelativeUrl} -> {LocalTemp}")
-            Try
-                NetDownloadByClient(RelativeUrl, LocalTemp)
-                NetDownloadByClient(RelativeUrl.Replace(".json", ".xaml"), LocalTemp.Replace(".json", ".xaml"))
-            Catch ex As Exception
-                Throw New Exception("下载指定的文件失败！" & vbCrLf &
-                                    "注意，联网帮助页面须指向一个帮助 JSON 文件，并在同路径下包含相应 XAML 文件！" & vbCrLf &
-                                    "例如：" & vbCrLf &
-                                    " - https://www.baidu.com/test.json（填写这个路径）" & vbCrLf &
-                                    " - https://www.baidu.com/test.xaml（同时也需要包含这个文件）", ex)
-            End Try
-            RelativeUrl = LocalTemp
+            Throw New NotSupportedException("此版本仅支持本地帮助页面，已移除远程页面下发。")
         End If
         RelativeUrl = RelativeUrl.Replace("/", "\").Lower.TrimStart("\")
 

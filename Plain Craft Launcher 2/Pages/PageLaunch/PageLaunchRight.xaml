@@ -11,6 +11,17 @@
                           Text="快照版 PCL 包含尚未正式发布的测试功能，仅限赞助者自己使用。&#xa;请不要随意发给其他人，或是用来制作整合包哦！" />
             <StackPanel x:Name="PanCustom">
             </StackPanel>
+            <Border x:Name="CommunismWelcome" Margin="0,0,0,15" Padding="26,25" CornerRadius="10" Background="#F2FFFAF0" BorderBrush="#60C19547" BorderThickness="1" Visibility="Collapsed">
+                <StackPanel>
+                    <TextBlock Text="★  MINECRAFT / JAVA EDITION" FontSize="11" FontWeight="SemiBold" Foreground="#FFA97B2E" Margin="0,0,0,14" />
+                    <TextBlock Text="万众一心，自由启程。" FontSize="28" FontWeight="SemiBold" Foreground="#FF981422" TextWrapping="Wrap" Margin="0,0,0,10" />
+                    <TextBlock Text="选择你的世界。每一种色彩，都向所有人开放。" FontSize="13" Foreground="#FF80695D" TextWrapping="Wrap" Margin="0,0,0,25" />
+                    <WrapPanel>
+                        <local:MyButton x:Name="BtnRedDownload" Text="下载 Minecraft" Height="35" MinWidth="140" Padding="14,0" ColorType="Highlight" Margin="0,0,14,0" />
+                        <local:MyButton x:Name="BtnRedThemes" Text="选择主题" Height="35" MinWidth="120" Padding="14,0" />
+                    </WrapPanel>
+                </StackPanel>
+            </Border>
             <local:MyCard Margin="0,0,0,15" Title="启动日志" x:Name="PanLog">
                 <local:MyTextBox x:Name="LabLog" Margin="15,34,15,13" Padding="0,4" IsReadOnly="True" IsUndoEnabled="False"
                          AcceptsReturn="True" TextWrapping="Wrap" BorderThickness="0" HasBackground="False"

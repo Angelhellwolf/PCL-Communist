@@ -1403,68 +1403,15 @@ OnLoaded:
     ''' 获取 Uuid 对应的皮肤文件地址，失败将抛出异常。
     ''' </summary>
     Public Function McSkinGetAddress(UUID As String, Type As String) As String
-        If UUID = "" Then Throw New Exception("UUID 为空。")
-        If UUID.StartsWithF("00000") AndAlso Type <> "Auth" Then Throw New Exception("离线 UUID 无正版皮肤文件：" & UUID)
-        '尝试读取缓存
-        Dim CacheSkinAddress As String = ReadIni(PathTemp & "Cache\Skin\Index" & Type & ".ini", UUID)
-        If Not CacheSkinAddress = "" Then Return CacheSkinAddress
-        '获取皮肤地址
-        Dim Url As String
-        Select Case Type
-            Case "Mojang", "Ms"
-                Url = "https://sessionserver.mojang.com/session/minecraft/profile/"
-            Case "Nide"
-                Url = "https://auth.mc-user.com:233/" & If(McInstanceSelected Is Nothing, Settings.Get(Of String)("CacheNideServer"), Settings.Get(Of String)("VersionServerNide", Instance:=McInstanceSelected)) & "/sessionserver/session/minecraft/profile/"
-            Case "Auth"
-                Url = If(McInstanceSelected Is Nothing, Settings.Get(Of String)("CacheAuthServerServer"), Settings.Get(Of String)("VersionServerAuthServer", Instance:=McInstanceSelected)) & "/sessionserver/session/minecraft/profile/"
-            Case Else
-                Throw New ArgumentException("皮肤地址种类无效：" & If(Type, "null"))
-        End Select
-        Dim SkinString = NetRequestByClientRetry(Url & UUID, RequireJson:=True)
-        If SkinString = "" Then Throw New Exception("皮肤返回值为空，可能是未设置自定义皮肤的用户")
-        '处理皮肤地址
-        Dim SkinValue As String
-        Try
-            For Each SkinProperty In SkinString.DeserializeJson()("properties")
-                If SkinProperty("name") = "textures" Then
-                    SkinValue = SkinProperty("value")
-                    Exit Try
-                End If
-            Next
-            Throw New Exception("未从皮肤返回值中找到符合条件的 Property")
-        Catch ex As Exception
-            Logger.Warn(ex, $"无法完成解析的皮肤返回值，可能是未设置自定义皮肤的用户：{SkinString}")
-            Throw New Exception("皮肤返回值中不包含皮肤数据项，可能是未设置自定义皮肤的用户", ex)
-        End Try
-        SkinString = Encoding.UTF8.GetString(Convert.FromBase64String(SkinValue))
-        Dim SkinJson As JObject = SkinString.Lower.DeserializeJson()
-        If SkinJson("textures") Is Nothing OrElse SkinJson("textures")("skin") Is Nothing OrElse SkinJson("textures")("skin")("url") Is Nothing Then
-            Throw New Exception("用户未设置自定义皮肤")
-        Else
-            Dim SkinUrl As String = SkinJson("textures")("skin")("url").ToString
-            SkinValue = If(SkinUrl.Contains("minecraft.net/"), SkinUrl.Replace("http://", "https://"), SkinUrl)
-        End If
-        '保存缓存
-        WriteIni(PathTemp & "Cache\Skin\Index" & Type & ".ini", UUID, SkinValue)
-        Logger.Info($"UUID {UUID} 对应的皮肤文件为 {SkinValue}")
-        Return SkinValue
+        Return PathImage & "Skins/" & McSkinSex(UUID) & ".png"
     End Function
 
-    Private ReadOnly McSkinDownloadLock As New Object
     ''' <summary>
-    ''' 从 Url 下载皮肤，可能会使用缓存。返回本地文件路径，失败将抛出异常。
+    ''' 仅使用本地皮肤；在线地址回退到内置皮肤。
     ''' </summary>
     Public Function McSkinDownload(Address As String) As String
-        Dim SkinName As String = PathUtils.GetLastPart(Address)
-        Dim FileAddress As String = PathTemp & "Cache\Skin\" & Address.GetStableHashCode() & ".png"
-        SyncLock McSkinDownloadLock
-            If Not FileUtils.Exists(FileAddress) Then
-                NetDownloadByClient(Address, FileAddress & ".PCLDownloading")
-                FileUtils.Move(FileAddress & ".PCLDownloading", FileAddress)
-                Logger.Info($"皮肤下载成功：{FileAddress}")
-            End If
-            Return FileAddress
-        End SyncLock
+        If Address.StartsWith("pack://", StringComparison.OrdinalIgnoreCase) OrElse FileUtils.Exists(Address) Then Return Address
+        Return PathImage & "Skins/Steve.png"
     End Function
 
     ''' <summary>
@@ -1779,49 +1726,6 @@ OnLoaded:
 
         'Library 文件
         Result.AddRange(McLibNetFilesFromTokens(McLibListGet(Instance, False)))
-
-        '统一通行证文件
-        If Settings.Get(Of Integer)("VersionServerLogin", Instance:=Instance) = 3 Then
-            Dim TargetFile As String = PathPure.Value & "nide8auth.jar"
-            Try
-                '测试链接：https://auth.mc-user.com:233/00000000000000000000000000000000/
-                Logger.Info("开始获取统一通行证下载信息")
-                Dim DownloadInfo As JObject = NetRequestByClientRetry("https://auth.mc-user.com:233/" & Settings.Get(Of String)("VersionServerNide", Instance:=Instance), RequireJson:=True).DeserializeJson()
-                Result.Add(New NetFile(
-                    Urls:={"https://login.mc-user.com:233/index/jar"},
-                    LocalPath:=TargetFile,
-                    Checker:=New FileChecker With {.Hash = DownloadInfo("jarHash").ToString}))
-            Catch ex As Exception
-                If FileUtils.Exists(TargetFile) Then
-                    Logger.Warn(ex, "获取统一通行证下载信息失败")
-                Else
-                    Throw New Exception("获取统一通行证下载信息失败", ex)
-                End If
-            End Try
-        End If
-
-        'Authlib-Injector 文件
-        If Settings.Get(Of Integer)("VersionServerLogin", Instance:=Instance) = 4 Then
-            Dim TargetFile = PathPure.Value & "authlib-injector.jar"
-            Try
-                Logger.Info("开始获取 Authlib-Injector 下载信息")
-                Dim DownloadInfo As JObject = NetRequestByClientRetry(
-                        "https://authlib-injector.yushi.moe/artifact/latest.json",
-                        BackupUrl:="https://bmclapi2.bangbang93.com/mirrors/authlib-injector/artifact/latest.json", RequireJson:=True).DeserializeJson()
-                Dim DownloadAddress As String = DownloadInfo("download_url").ToString.
-                        Replace("bmclapi2.bangbang93.com/mirrors/authlib-injector", "authlib-injector.yushi.moe")
-                Result.Add(New NetFile({
-                    DownloadAddress,
-                    DownloadAddress.Replace("authlib-injector.yushi.moe", "bmclapi2.bangbang93.com/mirrors/authlib-injector")
-                }, TargetFile, New FileChecker With {.Hash = DownloadInfo("checksums")("sha256").ToString}))
-            Catch ex As Exception
-                If FileUtils.Exists(TargetFile) Then
-                    Logger.Warn(ex, "获取 Authlib-Injector 下载信息失败")
-                Else
-                    Throw New Exception("获取 Authlib-Injector 下载信息失败", ex)
-                End If
-            End Try
-        End If
 
         '跳过校验
         If ShouldIgnoreFileCheck(Instance) Then

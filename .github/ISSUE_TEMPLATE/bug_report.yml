@@ -1,0 +1,20 @@
+name: 问题反馈
+description: 报告 PCL Communist 中的问题
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 问题与复现步骤
+      description: 请说明发生了什么、如何复现，以及你期望的结果。
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: 版本与系统
+      placeholder: PCL Communist 2.99.0.0 / Windows 11
+  - type: textarea
+    id: logs
+    attributes:
+      label: 日志或截图
+      description: 提交前请移除账号令牌和个人信息。

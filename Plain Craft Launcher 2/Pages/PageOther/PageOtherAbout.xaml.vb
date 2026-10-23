@@ -11,6 +11,11 @@ Public Class PageOtherAbout
         IsLoaded = True
 
         ItemAboutPcl.Info = ItemAboutPcl.Info.Replace("%VERSION%", VersionDisplay).Replace("%VERSIONCODE%", VersionCode).Replace("%BRANCH%", CInt(BuildType))
+        Using LicenceStream = Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("PCL.Licence.txt")
+            Using Reader As New StreamReader(LicenceStream, Encoding.UTF8)
+                TextBundledLicence.Text = Reader.ReadToEnd()
+            End Using
+        End Using
         If BuildType = BuildTypes.Debug Then
             BtnDonateDonate.Visibility = Visibility.Collapsed
             BtnDonateOutput.Visibility = Visibility.Visible
