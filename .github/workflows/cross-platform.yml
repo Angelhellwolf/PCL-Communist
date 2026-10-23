@@ -37,8 +37,15 @@ jobs:
         run: ./tools/Build-CrossPlatform.ps1 -Target desktop -Runtime ${{ matrix.runtime }}
       - name: Check native Windows startup on an inactive desktop
         if: matrix.runtime == 'win-x64'
-        shell: powershell
-        run: ./tools/Test-IsolatedProcess.ps1 -Executable ./artifacts/cross-platform/win-x64/PCL.Communist.Desktop.exe -OutputDirectory ./artifacts/cross-platform/windows-startup -TimeoutSeconds 10 -ExpectMainWindow -ExpectedWindowTitle 'PCL Communist · 跨平台预览' -ExpectedWindowClassPrefix Avalonia
+        shell: pwsh
+        run: powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./tools/Test-IsolatedProcess.ps1 -Executable ./artifacts/cross-platform/win-x64/PCL.Communist.Desktop.exe -OutputDirectory ./artifacts/cross-platform/windows-startup -TimeoutSeconds 10 -ExpectMainWindow -ExpectedWindowTitle 'PCL Communist · 跨平台预览' -ExpectedWindowClassPrefix Avalonia
+      - name: Upload Windows startup diagnostics on failure
+        if: failure() && matrix.runtime == 'win-x64'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: preview-windows-startup-failure
+          path: artifacts/cross-platform/windows-startup/*
+          if-no-files-found: ignore
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: preview-${{ matrix.runtime }}
