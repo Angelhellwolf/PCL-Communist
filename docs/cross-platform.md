@@ -52,10 +52,10 @@ pwsh ./tools/Build-CrossPlatform.ps1 -Target android -AndroidSdkDirectory /absol
 
 生成的 `*-Signed.apk` 使用本机构建环境的调试密钥，仅用于预览。应用使用私有存储目录，要求 Android 6.0/API 23 或更高版本。
 
-iOS 模拟器构建需要 Mac、兼容的 Xcode 和 .NET iOS workload：
+iOS 模拟器构建需要 Mac、兼容的 Xcode 和 .NET iOS workload。当前工作流固定使用 .NET SDK / workload set 10.0.401 与 Xcode 26.6，避免运行器更新后发生版本不匹配：
 
 ```powershell
-dotnet workload install ios --skip-manifest-update
+dotnet workload install ios --version 10.0.401
 pwsh ./tools/Build-CrossPlatform.ps1 -Target ios-simulator
 ```
 

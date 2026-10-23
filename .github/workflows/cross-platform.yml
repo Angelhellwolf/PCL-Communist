@@ -72,14 +72,19 @@ jobs:
 
   ios:
     name: iPhone and iPad simulator preview
-    runs-on: macos-latest
+    runs-on: macos-26
     timeout-minutes: 40
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
         with:
-          dotnet-version: 10.0.x
-      - run: dotnet workload install ios --skip-manifest-update
+          dotnet-version: 10.0.401
+      - name: Install the iOS workload matching Xcode 26.6
+        run: |
+          xcodebuild -version
+          dotnet workload install ios --version 10.0.401
       - name: Build simulator application without signing credentials
         shell: pwsh
         run: ./tools/Build-CrossPlatform.ps1 -Target ios-simulator
