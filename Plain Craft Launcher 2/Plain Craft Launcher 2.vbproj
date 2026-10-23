@@ -122,7 +122,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Modules\RedPolicy.vb" />
-    <EmbeddedResource Include="..\LICENCE" LogicalName="PCL.Licence.txt" />
+    <EmbeddedResource Include="..\COMMUNIST-AGREEMENT.txt" LogicalName="PCL.CommunistAgreement.txt" />
+    <EmbeddedResource Include="..\licenses\PCL-UPSTREAM.txt" LogicalName="PCL.Licence.txt" />
     <EmbeddedResource Include="..\.local\build-credentials.json" Condition="'$(IncludePrivateBuildCredentials)' == 'true' And Exists('..\.local\build-credentials.json')" LogicalName="PCL.RedBuildCredentials.json" />
     <Reference Include="CacheCow.Client, Version=2.13.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

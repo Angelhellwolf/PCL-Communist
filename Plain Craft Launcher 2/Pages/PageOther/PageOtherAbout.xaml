@@ -530,7 +530,10 @@
                     </Grid>
                 </StackPanel>
             </local:MyCard>
-            <local:MyCard Margin="0,0,0,15" Title="法律信息" IsSwapped="True" CanSwap="True">
+            <local:MyCard x:Name="CardCommunistAgreement" Margin="0,0,0,15" Title="☭ 共产共享协议" IsSwapped="True" CanSwap="True">
+                <TextBlock x:Name="TextCommunistAgreement" Margin="25,39,23,20" LineHeight="19" TextWrapping="Wrap" />
+            </local:MyCard>
+            <local:MyCard Margin="0,0,0,15" Title="网络与来源说明" IsSwapped="True" CanSwap="True">
                 <StackPanel Margin="25,39,23,20">
                     <TextBlock Text="网络功能" TextWrapping="Wrap" Margin="0,6,0,4" FontWeight="Bold" />
                     <TextBlock Margin="0,0,0,2" LineHeight="17" Text="本版本只保留资源下载和微软正版登录所需的联网功能，已移除匿名上报、启动器远程更新和配置下发。" TextWrapping="Wrap" />
@@ -539,15 +542,11 @@
                     <TextBlock Text="其他信息" TextWrapping="Wrap" Margin="0,10,0,4" FontWeight="Bold" />
                     <TextBlock Margin="0,0,0,2" LineHeight="17" Text="Copyright © 成都瓜皮龙科技有限公司&#13;计算机软件著作权登记号：2020SR0875133&#13;违法违规行为举报投诉邮箱：admin@meloong.com&#13;非 MINECRAFT 官方产品。未经 MOJANG 或 MICROSOFT 批准，也不与 MOJANG 或 MICROSOFT 关联。" TextWrapping="Wrap" />
                     <StackPanel Orientation="Horizontal" Height="35" HorizontalAlignment="Left" Margin="0,12,0,0">
-                        <local:MyButton Text="用户协议与免责声明" Width="170" Padding="13,0" Margin="0,0,20,0" ColorType="Highlight" 
-                                        local:CustomEventService.EventType="打开网页" local:CustomEventService.EventData="https://shimo.im/docs/rGrd8pY8xWkt6ryW#anchor-RnU9" />
-                        <local:MyButton Text="PCL 分发有限许可" Width="170" Padding="13,0" Margin="0,0,20,0" 
-                                        local:CustomEventService.EventType="打开网页" local:CustomEventService.EventData="https://shimo.im/docs/rGrd8pY8xWkt6ryW#anchor-X0bo" />
                         <local:MyButton Text="源代码" Width="140" Padding="13,0" local:CustomEventService.EventType="打开网页" local:CustomEventService.EventData="https://github.com/Angelhellwolf/PCL-Communist" />
                     </StackPanel>
                 </StackPanel>
             </local:MyCard>
-            <local:MyCard Margin="0,0,0,15" Title="PCL 分发许可与存储库指南" IsSwapped="True" CanSwap="True">
+            <local:MyCard Margin="0,0,0,15" Title="上游来源与原始许可" IsSwapped="True" CanSwap="True">
                 <TextBlock x:Name="TextBundledLicence" Margin="25,39,23,20" LineHeight="19" TextWrapping="Wrap" />
             </local:MyCard>
             <local:MyCard Margin="0,0,0,15" Title="许可与版权声明" IsSwapped="True" CanSwap="True">

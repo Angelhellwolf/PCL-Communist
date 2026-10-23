@@ -11,6 +11,11 @@ Public Class PageOtherAbout
         IsLoaded = True
 
         ItemAboutPcl.Info = ItemAboutPcl.Info.Replace("%VERSION%", VersionDisplay).Replace("%VERSIONCODE%", VersionCode).Replace("%BRANCH%", CInt(BuildType))
+        Using AgreementStream = Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("PCL.CommunistAgreement.txt")
+            Using Reader As New StreamReader(AgreementStream, Encoding.UTF8)
+                TextCommunistAgreement.Text = Reader.ReadToEnd()
+            End Using
+        End Using
         Using LicenceStream = Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("PCL.Licence.txt")
             Using Reader As New StreamReader(LicenceStream, Encoding.UTF8)
                 TextBundledLicence.Text = Reader.ReadToEnd()

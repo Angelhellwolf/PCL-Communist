@@ -6,7 +6,7 @@
 
 基于 Plain Craft Launcher 的第三方独立修改版。原作者为龙腾猫跃及 PCL 贡献者；本项目由社区独立维护。
 
-[下载单文件 EXE](https://github.com/Angelhellwolf/PCL-Communist/releases/latest) · [查看源代码](https://github.com/Angelhellwolf/PCL-Communist) · [反馈问题](https://github.com/Angelhellwolf/PCL-Communist/issues)
+[下载单文件 EXE](https://github.com/Angelhellwolf/PCL-Communist/releases/latest) · [共产共享协议](COMMUNIST-AGREEMENT.txt) · [查看源代码](https://github.com/Angelhellwolf/PCL-Communist) · [反馈问题](https://github.com/Angelhellwolf/PCL-Communist/issues)
 
 ![启动器主页](docs/images/launcher.png)
 
@@ -33,6 +33,7 @@
 - 保留微软正版登录、账号刷新、正版购买验证、离线模式，以及游戏、Java、加载器、模组和整合包下载所需的元数据。
 - 移除启动器远程更新、配置下发、遥测、联网主页、远程帮助、EasyTier、第三方登录和在线皮肤管理。
 - 首次启动直接进入主页，移除“协议授权”弹窗和启动阻断。
+- 关于页面可离线查看《共产共享协议》：免费共享、全部主题平等开放、修改源码公开；启动无需点击同意。
 
 ## 为什么我们把它叫作“共产主义”
 
@@ -78,10 +79,14 @@ GitHub Actions 自动构建 Release 并运行 WPF 检查。`tools/SmokeTest` 覆
 
 已有本机检查覆盖单 EXE 首次启动、全部主题和实际客户端下载。微软完整账号授权需要用户自行完成，未代替用户实登。问题和改进建议请提交到本仓库 Issues 或 Pull Requests。
 
-## 来源与许可
+## 共享协议与来源
+
+本项目有权授权的原创修改、新增代码、美术和文档适用自定义的[《共产共享协议》](COMMUNIST-AGREEMENT.txt)。任何人均可免费使用、学习、修改和再分发这些内容；再分发修改版应公开相应修改的源码，并保持主题、隐藏主题、成就及客户端下载入口平等开放。
+
+协议不以政治立场、地区或赞助区分用户，也不作为启动器的强制同意弹窗。协议正文已嵌入单文件 EXE，可在“关于 → ☭ 共产共享协议”离线查阅。
 
 - PCL 源码基线：`lZiMUl/PCL2`，提交 `6b9a50df911c9d68b69b24c979efba477fb14b67`，2.99.0.0 正式版。
 - MeloongCore 固定提交：`98157d65c7627721c816c02e8be96ac4fe61d615`。
 - 原作者：龙腾猫跃及 PCL 贡献者。[原作者赞助页面](https://meloong.com/afd/a/LTCat)。
-- 本仓库公开修改源码；上游 PCL 沿用其有限分发许可，详见 [LICENCE](LICENCE)。依赖保留各自许可和版权声明。
+- 上游 PCL 原始说明保存在 [licenses/PCL-UPSTREAM.txt](licenses/PCL-UPSTREAM.txt)，内容完整保留；上游及依赖继续适用各自许可和版权声明。本项目的共享协议仅覆盖维护者有权授权的内容。
 - 主题配色为本修改版补全实现。此版本由第三方独立修改，非 Minecraft 官方产品。

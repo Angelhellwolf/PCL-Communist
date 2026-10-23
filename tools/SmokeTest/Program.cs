@@ -113,6 +113,8 @@ internal static class Program {
                 launcher.GetCustomAttribute<AssemblyProductAttribute>()?.Product == "PCL Communist", "Executable metadata uses PCL Communist");
             using (var licence = new StreamReader(launcher.GetManifestResourceStream("PCL.Licence.txt")!))
                 Check(licence.ReadToEnd().Contains("PCL 分发有限许可"), "Distribution licence is embedded in the single executable");
+            using (var agreement = new StreamReader(launcher.GetManifestResourceStream("PCL.CommunistAgreement.txt")!))
+                Check(agreement.ReadToEnd().Contains("PCL Communist 共产共享协议"), "Communist sharing agreement is embedded for offline viewing");
 
             // Route every test setting to the isolated host directory, including registry settings.
             var entries = (IDictionary)T("Settings").GetField("Entries", Static)!.GetValue(null)!;
@@ -211,7 +213,18 @@ internal static class Program {
             var about = (UIElement)Activator.CreateInstance(T("PageOtherAbout"))!;
             ((Border)Control(window, "PanMainRight")).Child = about;
             Pump(200);
+            about.GetType().GetMethod("PageOnEnter")!.Invoke(about, null);
+            Pump(500);
+            Check(((TextBlock)Control(about, "TextCommunistAgreement")).Text.Contains("使用权不以地区、身份、政治立场、赞助或付费为条件"), "About page shows the new sharing agreement without a network request");
             Check(((TextBlock)Control(about, "TextBundledLicence")).Text.Contains("PCL 分发有限许可"), "About page shows bundled distribution licence without a sidecar file");
+            var agreementCard = (FrameworkElement)Control(about, "CardCommunistAgreement");
+            agreementCard.GetType().GetProperty("UseAnimation")!.SetValue(agreementCard, false);
+            agreementCard.GetType().GetProperty("IsSwapped")!.SetValue(agreementCard, false);
+            Pump(200);
+            ((ScrollViewer)Control(about, "PanBack")).ScrollToVerticalOffset(
+                agreementCard.TranslatePoint(new Point(0, 0), (UIElement)Control(about, "PanMain")).Y);
+            Pump(200);
+            Capture(window, Path.Combine(output, "Communist-agreement.png"));
             File.WriteAllLines(Path.Combine(output, "smoke-results.txt"), report);
             Console.WriteLine("PASS: " + checks + " runtime checks; home and theme screenshots saved.");
             Environment.Exit(0);
